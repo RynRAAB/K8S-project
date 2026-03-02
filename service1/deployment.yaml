@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: repertoire-contacts
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: repertoire-contacts
+  template:
+    metadata:
+      labels:
+        app: repertoire-contacts
+    spec:
+      containers:
+      - name: repertoire-contacts
+        image: rraab784/repertoire-contacts:2.0
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:mysql://mysql-service:3306/contacts_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+        - name: SPRING_DATASOURCE_USERNAME
+          value: "contacts"
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: "contacts123"

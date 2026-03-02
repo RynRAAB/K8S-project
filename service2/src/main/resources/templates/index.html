@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Répertoire Contacts</title>
+    <meta charset="UTF-8">
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 3px double red; padding: 8px; text-align: left; }
+        th { background-color:darkturquoise; }
+        .error { color: red; }
+        .success { color: green; }
+        form { margin: 20px 0; }
+        input, button { padding: 5px; margin: 5px;}
+        h1 {font-weight: bolder; font-size: 35px; text-align: center;} 
+        h2 {font-weight: bold; dominant-baseline: 30px; text-decoration: underline;}
+    </style>
+</head>
+<body style="background-color:aqua;">
+    <h1>📱 Répertoire Contacts</h1>
+    
+    <!-- Messages -->
+    <div th:if="${message}" class="success" th:text="${message}"></div>
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+    
+    <!-- Liste des contacts -->
+    <h2>📋 Votre repertoire</h2>
+    <table th:if="${contacts != null and not #lists.isEmpty(contacts)}">
+        <tr>
+            <th>ID</th><th>Nom</th><th>Prénom</th><th>Téléphone</th><th>Email</th><th>Actions</th>
+        </tr>
+        <tr th:each="contact : ${contacts}">
+            <td th:text="${contact.id}"></td>
+            <td th:text="${contact.nom}"></td>
+            <td th:text="${contact.prenom}"></td>
+            <td th:text="${contact.telephone}"></td>
+            <td th:text="${contact.email}"></td>
+            <td>
+                <a th:href="@{/delete/{id}(id=${contact.id})}" 
+                   onclick="return confirm('Supprimer ce contact ?')"
+                   style="color:red">🗑️ Supprimer ce contact</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a th:href="@{/edit/{id}(id=${contact.id})}">✏️ Modifier ce contact</a>
+            </td>
+        </tr>
+    </table>
+    <p th:if="${contacts == null or #lists.isEmpty(contacts)}">Aucun contact</p>
+    
+    <!-- Formulaire Ajouter -->
+    <h2>➕ Ajouter un contact</h2>
+    <form th:action="@{/add}" method="post" style="display: flex;">
+        <input type="text" name="nom" placeholder="Nom" required><br>
+        <input type="text" name="prenom" placeholder="Prénom" required><br>
+        <input type="telephone" name="telephone" placeholder="06.xx.xx.xx.xx" required><br>
+        <input type="email" name="email" placeholder="email@example.com" required><br>
+        <button type="submit">Ajouter Contact</button>
+    </form>
+</body>
+</html>

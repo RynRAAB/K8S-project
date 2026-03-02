@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: repertoire-frontend-deployment
+  labels:
+    app: frontend-contacts
+spec:
+  replicas: 2  # 2 pods pour HA
+  selector:
+    matchLabels:
+      app: frontend-contacts
+  template:
+    metadata:
+      labels:
+        app: frontend-contacts
+    spec:
+      containers:
+      - name: frontend-container
+        image: rraab784/repertoire-contacts-frontend:1.0  # Ton image Docker Hub
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8081  
+        env:
+        - name: BACKEND_URL
+          value: "http://repertoire-contacts-service.default.svc.cluster.local:80/api/contacts"  
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 5

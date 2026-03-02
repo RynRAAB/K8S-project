@@ -1,0 +1,4 @@
+com\rayaneraab\service1\controller\ContactController.class
+com\rayaneraab\service1\model\Contact.class
+com\rayaneraab\service1\Service1Application.class
+com\rayaneraab\service1\repository\ContactRepository.class
